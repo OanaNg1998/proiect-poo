@@ -9,13 +9,13 @@ public:
 	~Matrix();
 	int get_nrcol();
 	int get_nrrow() ;
-	Matrix operator+=(Matrix obj);
-	Matrix operator+=(double number);
-	Matrix operator-=(Matrix obj);
-	Matrix operator-=(double number);
-	Matrix operator*=( Matrix obj);
-	Matrix operator*=(double number);
-	Matrix operator/=(double number);
+	Matrix& operator+=(Matrix obj);
+	Matrix& operator+=(double number);
+	Matrix& operator-=(Matrix obj);
+	Matrix& operator-=(double number);
+	Matrix& operator*=( Matrix obj);
+	Matrix& operator*=(double number);
+	Matrix& operator/=(double number);
 	Matrix operator[](int pos);
 
 

@@ -42,7 +42,8 @@ Matrix::Matrix(const Matrix& obj)
 	m_nrrow = obj.m_nrrow;
 	m_nrcol = obj.m_nrcol;
 	m_elem = new double* [m_nrrow];
-	for (int i = 0; i < m_nrrow; i++) {
+	for (int i = 0; i < m_nrrow; i++)
+    {
 		m_elem[i] = new double[m_nrcol];
 		for (int j = 0; j < m_nrcol; j++)
 			m_elem[i][j] = obj.m_elem[i][j];
@@ -53,90 +54,85 @@ Matrix::Matrix(const Matrix& obj)
 Matrix::~Matrix()
 {
     for(int i=0;i<m_nrrow;i++)
-delete m_elem[i];
-delete[]m_elem;
+            delete m_elem[i];
+    delete[]m_elem;
 
 }
 //Operatori de citire si afisare:
 
 std::istream & operator>>(std::istream & stream, Matrix & obj)
 {
-
-
-	for(int i=0;i<obj.m_nrrow;i++)
-	for (int j = 0; j < obj.m_nrcol; j++)
-    {
-		stream >> obj.m_elem[i][j];
-	}
+    for(int i=0;i<obj.m_nrrow;i++)
+        for (int j = 0; j < obj.m_nrcol; j++)
+        {
+            stream >> obj.m_elem[i][j];
+        }
 	return stream;
 }
 std::ostream & operator<<(std::ostream & stream, const Matrix & obj)
 {
-
-	for (int i = 0; i < obj.m_nrrow; i++)
-		{for (int j = 0; j < obj.m_nrcol; j++)
-{
-
-
-			stream<<obj.m_elem[i][j]<< ' ';
-
-		}
-		stream << std::endl;
-		}
+    for (int i = 0; i < obj.m_nrrow; i++)
+    {   for (int j = 0; j < obj.m_nrcol; j++)
+        {
+            stream<<obj.m_elem[i][j]<< ' ';
+        }
+        stream << std::endl;
+    }
 
 
 
 
 	return stream;
 }
+
+
 //Operatori compusi de atribuire:
 
 
 
-Matrix Matrix::operator+=(Matrix obj)
-{ std::cout<<"#### Matrix += Matrix ####"<<std::endl;
+Matrix& Matrix::operator+=(Matrix obj)
+{
     if(m_nrrow==obj.m_nrrow && m_nrcol==obj.m_nrcol)
    {
 
-    for(int i=0;i<m_nrrow;i++)
-        for(int j=0;j<m_nrcol;j++)
-        m_elem[i][j]=m_elem[i][j]+obj.m_elem[i][j];
+        for(int i=0;i<m_nrrow;i++)
+            for(int j=0;j<m_nrcol;j++)
+                m_elem[i][j]=m_elem[i][j]+obj.m_elem[i][j];
 
     return *this;
    }
-   else{ std::cout<<"Cele 2 obiecte din clasa Matrix nu respecta regulile adunarii,deci operatorul += nu se poate realiza"<<std::endl;
-   return 0;}
+   else throw 3;
+
 }
 
-Matrix Matrix::operator+=(double number)
-{ std::cout<<"#### Matrix += number ####"<<std::endl;
+Matrix& Matrix::operator+=(double number)
+{
     for(int i=0;i<m_nrrow;i++)
         for(int j=0;j<m_nrcol;j++)
-        m_elem[i][j]=m_elem[i][j]+number;
+            m_elem[i][j]=m_elem[i][j]+number;
 
     return *this;
 }
 
-Matrix Matrix::operator-=(Matrix obj)
+Matrix& Matrix::operator-=(Matrix obj)
 {
-    std::cout<<"#### Matrix -= Matrix ####"<<std::endl;
     if(m_nrrow==obj.m_nrrow && m_nrcol==obj.m_nrcol)
-    {for(int i=0;i<m_nrrow;i++)
-        for(int j=0;j<m_nrcol;j++)
-        m_elem[i][j]=m_elem[i][j]-obj.m_elem[i][j];
+    {
+        for(int i=0;i<m_nrrow;i++)
+            for(int j=0;j<m_nrcol;j++)
+                m_elem[i][j]=m_elem[i][j]-obj.m_elem[i][j];
 
     return *this;
     }
-    else { std::cout<<"Cele 2 obiecte din clasa Matrix nu respecta regulile scaderii,deci operatorul -= nu se poate realiza"<<std::endl;
-    return 0;}
+    else throw 4;
+
 }
 
-Matrix Matrix::operator-=(double number)
+Matrix& Matrix::operator-=(double number)
 {
-    std::cout<<"#### Matrix -= number ####"<<std::endl;
     for(int i=0;i<m_nrrow;i++)
         for(int j=0;j<m_nrcol;j++)
-        m_elem[i][j]=m_elem[i][j]-number;
+            m_elem[i][j]=m_elem[i][j]-number;
 
     return *this;
 }
@@ -144,54 +140,55 @@ Matrix Matrix::operator-=(double number)
 
 
 
-Matrix Matrix::operator*=( Matrix obj)
-{ std::cout<<"#### Matrix *= Matrix ####"<<std::endl;
+Matrix& Matrix::operator*=( Matrix obj)
+{
     if(m_nrcol!=obj.m_nrrow) throw 1 ;
 
-else{
-int newRows = m_nrrow;
-    int newCols = obj.m_nrcol;
+    else{
+            int newRows = m_nrrow;
+            int newCols = obj.m_nrcol;
 
- Matrix *NewMatrix = new Matrix(newRows, newCols);
+            Matrix *NewMatrix = new Matrix(newRows, newCols);
 
-
-	for (int i = 0; i < newRows; i++)
-	{
-		for (int j = 0; j < newCols; j++)
-		{ int answer=0;
-			for (int k = 0; k < m_nrcol;k++)
-				answer+=this->m_elem[i][k] * (obj.m_elem[k][j]);
+            for (int i = 0; i < newRows; i++)
+            {
+                for (int j = 0; j < newCols; j++)
+                {   int answer=0;
+                    for (int k = 0; k < m_nrcol;k++)
+                        answer+=this->m_elem[i][k] * (obj.m_elem[k][j]);
 				(*NewMatrix).m_elem[i][j]=answer;
-		}
+                }
 
-	}
- *this=*NewMatrix;
-	return *this;
-   }
+            }
+    *this=*NewMatrix;
+	 return *this;
+        }
 
 }
 
 
 
-Matrix Matrix::operator*=(double number)
-{ std::cout<<"#### Matrix *= number ####"<<std::endl;
+Matrix& Matrix::operator*=(double number)
+{
     for(int i=0;i<m_nrrow;i++)
         for(int j=0;j<m_nrcol;j++)
-        m_elem[i][j]=m_elem[i][j]*number;
+            m_elem[i][j]=m_elem[i][j]*number;
     return *this;
 }
 
 
 
-Matrix Matrix::operator/=(double number)
-{ std::cout<<"#### Matrix /=  number ####"<<std::endl;
+Matrix& Matrix::operator/=(double number)
+{
     if(number ==0) throw 2;
-   else{ for(int i=0;i<m_nrrow;i++)
-        for(int j=0;j<m_nrcol;j++)
-        m_elem[i][j]=m_elem[i][j]/number;
+        else
+            {
+                for(int i=0;i<m_nrrow;i++)
+                    for(int j=0;j<m_nrcol;j++)
+                        m_elem[i][j]=m_elem[i][j]/number;
 
-    return *this;
-   }
+            return *this;
+            }
 }
 
 //Operatori unari:
@@ -199,14 +196,14 @@ Matrix Matrix::operator/=(double number)
 
 
 Matrix operator+(Matrix obj )
-{ std::cout<<"#### Operator unar + ####"<<std::endl;
+{
     Matrix result(obj);
 
     return result;
 }
 
 Matrix operator-(Matrix obj)
-{ std::cout<<"#### Opusul matricei - Operator unar - ####"<<std::endl;
+{
     Matrix result(obj);
     result*=(-1);
 
@@ -218,101 +215,97 @@ Matrix operator-(Matrix obj)
 //Operatori aritmetici binari:
 
 Matrix operator+(Matrix obj1, Matrix obj2)
-{ std::cout<<"#### Matrix + Matrix ####"<<std::endl;
+{
     if(obj1.m_nrrow==obj2.m_nrrow && obj1.m_nrcol==obj2.m_nrcol)
-	{Matrix result(obj1);
-
-			result+=obj2;
+	{
+	    Matrix result(obj1);
+        result+=obj2;
 
 	return result;
-	} else{ std::cout<<"Matricile nu sunt de acelasi tip,deci nu se poate realiza operatorul +"<<std::endl;
-	return 0;}
+	}
+    else throw 5;
 }
 
 
 Matrix operator+( Matrix obj, double number)
-{ std::cout<<"#### Matrix + number ####"<<std::endl;
+{
 	Matrix result(obj);
-
-			result+=number;
+    result+=number;
 
 	return result;
 }
 
 
 Matrix operator+( double number,Matrix obj)
-{ std::cout<<"#### number + Matrix ####"<<std::endl;
+{
 	Matrix result(obj);
-
-			result+=number;
+    result+=number;
 
 	return result;
 }
 
 
 Matrix operator-(Matrix obj1, Matrix obj2)
-{ std::cout<<"#### Matrix - Matrix ####"<<std::endl;
+{
     if(obj1.m_nrrow==obj2.m_nrrow && obj1.m_nrcol==obj2.m_nrcol)
-	{Matrix result(obj1);
-
-			result-=obj2;
+	{
+	    Matrix result(obj1);
+        result-=obj2;
 
 	return result;
 	}
-	else { std::cout<<"Matricile nu sunt de acelasi tip,deci nu se poate realiza operatorul -"<<std::endl;
-	return 0;}
+	else throw 6;
+
 }
 
 
 Matrix operator-(Matrix obj, double number)
-{ std::cout<<"#### Matrix - number ####"<<std::endl;
+{
 	Matrix result(obj);
-
-			result-=number;
+    result-=number;
 
 	return result;
 }
 
 
 Matrix operator-( double number,Matrix obj)
-{ std::cout<<"#### number - Matrix ####"<<std::endl;
+{
 	Matrix result(obj);
-
-			result*=(-1);
-			result+=number;
+    result*=(-1);
+    result+=number;
 
 	return result;
 }
 
 
 Matrix operator*(Matrix obj1, Matrix obj2)
-{ std::cout<<" ##### Matrix * Matrix ####"<<std::endl;
+{
     if(obj1.m_nrcol==obj2.m_nrrow)
-	{Matrix result(obj1.m_nrrow,obj2.m_nrcol);
-	for(int i=0;i<obj1.m_nrrow;i++)
-    for(int j=0;j<obj2.m_nrcol;j++)
-        result.m_elem[i][j]=0;
-	for (int i = 0; i < obj1.m_nrrow; i++)
 	{
-		for (int j = 0; j < obj2.m_nrcol; j++)
-		{
-			for (int k = 0; k < obj2.m_nrrow;k++)
-				result.m_elem[i][j] = result.m_elem[i][j] + obj1.m_elem[i][k] * obj2.m_elem[k][j];
-		}
+	    Matrix result(obj1.m_nrrow,obj2.m_nrcol);
+        for(int i=0;i<obj1.m_nrrow;i++)
+            for(int j=0;j<obj2.m_nrcol;j++)
+                result.m_elem[i][j]=0;
+        for (int i = 0; i < obj1.m_nrrow; i++)
+        {
+            for (int j = 0; j < obj2.m_nrcol; j++)
+            {
+                for (int k = 0; k < obj2.m_nrrow;k++)
+                    result.m_elem[i][j] = result.m_elem[i][j] + obj1.m_elem[i][k] * obj2.m_elem[k][j];
+            }
 
+        }
+
+	return result;
 	}
-
-	return result;}
-	else {std::cout<<"Matricile nu respecta regulile inmultirii,deci operatorul * nu se poate realiza"<<std::endl;
-	return 0;}
+	else throw 7;
 }
 
 
 Matrix operator*(Matrix obj, double number)
-{ std::cout<<"#### Matrix * number ####"<<std::endl;
+{
 	Matrix result(obj);
-
-			result*=number;
+    result*=number;
 
 
 	return result;
@@ -321,10 +314,9 @@ Matrix operator*(Matrix obj, double number)
 
 
 Matrix operator*(double number,Matrix obj)
-{ std::cout<<"#### number * Matrix ####"<<std::endl;
+{
 	Matrix result(obj);
-
-			result*=number;
+    result*=number;
 
 
 	return result;
@@ -333,29 +325,29 @@ Matrix operator*(double number,Matrix obj)
 
 
  Matrix operator/(Matrix obj, double number)
-{ std::cout<<"#### Matrix / number ####"<<std::endl;
-    if(number !=0)
 {
-    Matrix result(obj);
-	for (int i = 0; i < obj.m_nrrow; i++)
-	{
-		for (int j = 0; j < obj.m_nrcol; j++)
-			result.m_elem[i][j] = obj.m_elem[i][j] / number;
-	}
+    if(number !=0)
+    {
+        Matrix result(obj);
+        for (int i = 0; i < obj.m_nrrow; i++)
+        {
+            for (int j = 0; j < obj.m_nrcol; j++)
+                result.m_elem[i][j] = obj.m_elem[i][j] / number;
+        }
 
 	return result;
-}
-else { std::cout<<" Scalarul este nul,deci operatorul / nu se poate realiza"<<std::endl;
-return 0;}
+    }
+    else  throw 8;
+
 }
 
 
 Matrix operator/(double number,Matrix obj)
-{ std::cout<<"#### number / Matrix ####"<<std::endl;
+{
 	Matrix result(obj);
 	for (int i = 0; i < obj.m_nrrow; i++)
 	{
-		for (int j = 0; j < obj.m_nrcol; j++)
+        for (int j = 0; j < obj.m_nrcol; j++)
 			result.m_elem[i][j] = number /obj.m_elem[i][j];
 	}
 
@@ -364,35 +356,34 @@ Matrix operator/(double number,Matrix obj)
 
 
 Matrix operator^( const Matrix obj,int number)
-{  std::cout<<"#### Matrix ^ number ####"<<std::endl;
-  if(number==1) return obj;
-  if(number == 0)  return 1;
-if(obj.m_nrrow==obj.m_nrcol)
-
+{
+    if(number==1) return obj;
+    if(number == 0)  return 1;
+    if(obj.m_nrrow==obj.m_nrcol)
     {
+        Matrix result(obj);
+        for(int i=0;i<number-1;i++)
+            result*=obj;
+        int boolean =0;
+        for(int index_row=0;index_row<result.m_nrrow;index_row++)
+        for(int index_col=0;index_col<result.m_nrcol;index_col++)
+            if(result.m_elem[index_row][index_col]>DBL_MAX) boolean=1;
 
-    Matrix result(obj);
-    for(int i=0;i<number-1;i++)
-    result*=obj;
-    int boolean =0;
-    for(int index_row=0;index_row<result.m_nrrow;index_row++)
-    for(int index_col=0;index_col<result.m_nrcol;index_col++)
-
-    if(result.m_elem[index_row][index_col]>DBL_MAX) boolean=1;
-
-   if(boolean ==1 ) throw 0;
-   else { return result; }
+        if(boolean ==1 ) throw -1;
+        else
+        {
+            return result;
+        }
 
      }
-     else { std::cout<<"Matricea nu indeplineste regulile ridicarii la putere,deci operatorul ^ nu se poate realiza"<<std::endl;
-     return 0;}
+     else throw 0;
 
 }
 
 //Alti operatori:
 
 Matrix Matrix::operator[](int pos)
-{ std::cout<<"#### Operatorul [] ####"<<std::endl;
+{
     if(m_nrcol==1)
     {
         Matrix result;
@@ -410,12 +401,10 @@ Matrix Matrix::operator[](int pos)
     else
     {
         int i;
-           Matrix result(1,m_nrcol);
-
-
-           for( i=0;i<m_nrcol;i++)
+        Matrix result(1,m_nrcol);
+        for( i=0;i<m_nrcol;i++)
             result.m_elem[0][i]=m_elem[pos][i];
-            return result;
+        return result;
     }
 
 }
@@ -426,25 +415,27 @@ Matrix Matrix::operator[](int pos)
 
 
 bool operator==(Matrix obj1,Matrix obj2)
-{ std::cout<<"#### Matrix == Matrix #### - - > Cele 2 obiecte din clasa Matrix:  sunt egale -> 1  nu sunt egale -> 0"<<std::endl;
+{
     if(obj1.m_nrrow!=obj2.m_nrrow || obj1.m_nrcol!=obj2.m_nrcol )
         return false;
     for(int i=0;i<obj1.m_nrrow;i++)
         for (int j=0;j<obj1.m_nrcol;j++)
-        if(obj1.m_elem[i][j]!=obj2.m_elem[i][j])
-        return false;
+            if(obj1.m_elem[i][j]!=obj2.m_elem[i][j])
+                return false;
 
     return true;
 }
 bool operator!=(Matrix obj1,Matrix obj2)
-{ std::cout<<"#### Matrix != Matrix #### - - > Cele 2 obiecte din clasa Matrix:  nu sunt egale -> 1   sunt egale -> 0"<<std::endl;
+{
     int counter=0;
     if(obj1.m_nrrow==obj2.m_nrrow && obj1.m_nrcol==obj2.m_nrcol)
     {
         for(int i=0;i<obj1.m_nrrow;i++)
-        {for(int j=0;j<obj1.m_nrcol;j++)
-            if(obj1.m_elem[i][j]==obj2.m_elem[i][j]) counter++;}
-            if(counter==obj1.m_nrrow*obj1.m_nrcol) return false;
+        {
+            for(int j=0;j<obj1.m_nrcol;j++)
+                if(obj1.m_elem[i][j]==obj2.m_elem[i][j]) counter++;
+        }
+                if(counter==obj1.m_nrrow*obj1.m_nrcol) return false;
     }
     return true;
 
