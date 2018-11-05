@@ -1,15 +1,17 @@
 # depslib dependency file v1.0
-1541367665 source:c:\users\oana_\desktop\programare\proiect poo\main.cpp
+1541438395 source:c:\users\oana_\desktop\programare\proiect poo\main.cpp
 	<iostream>
-	"Matrix.h"
+	"Matrix.hpp"
 	"Matrix.cpp"
 	<limits>
 
-1541363344 c:\users\oana_\desktop\programare\proiect poo\matrix.h
+1541438376 c:\users\oana_\desktop\programare\proiect poo\matrix.h
 
-1541366747 c:\users\oana_\desktop\programare\proiect poo\matrix.cpp
-	"Matrix.h"
+1541438345 c:\users\oana_\desktop\programare\proiect poo\matrix.cpp
+	"Matrix.hpp"
 	<iostream>
 	<limits>
 	<math.h>
+
+1541438346 c:\users\oana_\desktop\programare\proiect poo\matrix.hpp
 

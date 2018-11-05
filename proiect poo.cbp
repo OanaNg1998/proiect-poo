@@ -35,7 +35,7 @@
 		<Unit filename="Matrix.cpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="Matrix.h">
+		<Unit filename="Matrix.hpp">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="main.cpp" />
